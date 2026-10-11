@@ -35,24 +35,6 @@ jobs:
           cp -R "$APP" Package/Payload/
           (cd Package && zip -q -r ../Astra-Retro-Sky-v1.0-unsigned.ipa Payload)
           unzip -t Astra-Retro-Sky-v1.0-unsigned.ipa | tail -n 2
-      - name: Optional simulator boot and menu screenshot
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          DEVICE=$(xcrun simctl list devices available | sed -nE 's/^.*iPhone 16 Pro[^()]*\(([0-9A-F-]{36})\).*$/\1/p' | head -n 1)
-          if [[ -z "$DEVICE" ]]; then
-            echo "Simulator model not installed. Skipping screenshot."
-            exit 0
-          fi
-          xcrun simctl boot "$DEVICE"
-          xcrun simctl bootstatus "$DEVICE" -b
-          xcrun simctl install "$DEVICE" DerivedData/Build/Products/Release-iphoneos/Astra.app
-          xcrun simctl launch "$DEVICE" io.github.kh1zsn0w.astraarcade
-          sleep 3
-          xcrun simctl io "$DEVICE" screenshot Astra-menu-simulator.png
-          xcrun simctl shutdown "$DEVICE"
-          test -s Astra-menu-simulator.png
       - name: Upload verified unsigned IPA and diagnostics
         if: always()
         uses: actions/upload-artifact@v4

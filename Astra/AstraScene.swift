@@ -521,7 +521,7 @@ final class AstraScene: SKScene {
         let hp = kind == 2 ? 54 : kind == 1 ? 31 : 18
         enemies.append(Hostile(sprite: enemy, hitPoints: hp + (sector - 1) * 3,
                                maximum: hp + (sector - 1) * 3, kind: kind, age: 0,
-                               nextShot: CGFloat.random(in: 1.1.0.0.2.3),
+                               nextShot: CGFloat.random(in: 1.1...2.3),
                                speed: (kind == 2 ? 75 : kind == 1 ? 148 : 115) + CGFloat(sector - 1) * 5))
     }
 
@@ -593,7 +593,7 @@ final class AstraScene: SKScene {
         let vx = dx / norm
         let vy = dy / norm
         if enemy.kind == 3 {
-            for offset in -3.0.0.3 {
+            for offset in -3...3 {
                 let direction = CGFloat(offset) * 0.17
                 let speed: CGFloat = 225
                 let delta = CGVector(dx: sin(direction) * speed, dy: -cos(direction) * speed)
@@ -669,8 +669,8 @@ final class AstraScene: SKScene {
         if enemy.hitPoints <= 0 {
             destroyEnemy(at: index)
         } else if Int.random(in: 0..<5) == 0 {
-            spark(at: CGPoint(x: enemy.sprite.position.x + CGFloat.random(in: -12.0.0.12),
-                              y: enemy.sprite.position.y + CGFloat.random(in: -12.0.0.12)),
+            spark(at: CGPoint(x: enemy.sprite.position.x + CGFloat.random(in: -12...12),
+                              y: enemy.sprite.position.y + CGFloat.random(in: -12...12)),
                   color: Ink.orange, count: 2, scale: 0.45)
         }
     }
@@ -808,20 +808,20 @@ final class AstraScene: SKScene {
 
     private func spark(at point: CGPoint, color: SKColor, count: Int, scale: CGFloat) {
         for _ in 0..<count {
-            let chip = SKShapeNode(rectOf: CGSize(width: CGFloat.random(in: 2.0.0.5) * scale,
-                                                   height: CGFloat.random(in: 3.0.0.9) * scale))
+            let chip = SKShapeNode(rectOf: CGSize(width: CGFloat.random(in: 2...5) * scale,
+                                                   height: CGFloat.random(in: 3...9) * scale))
             chip.fillColor = Int.random(in: 0..<4) == 0 ? Ink.white : color
             chip.strokeColor = .clear
             chip.isAntialiased = false
             chip.position = point
             chip.zPosition = 150
             effects.addChild(chip)
-            let dx = CGFloat.random(in: -98.0.0.98) * scale
-            let dy = CGFloat.random(in: -130.0.0.130) * scale
-            let duration = Double.random(in: 0.25.0.0.0.70)
+            let dx = CGFloat.random(in: -98...98) * scale
+            let dy = CGFloat.random(in: -130...130) * scale
+            let duration = Double.random(in: 0.25...0.70)
             chip.run(.sequence([.group([.moveBy(x: dx, y: dy, duration: duration),
                                          .fadeOut(withDuration: duration),
-                                         .rotate(byAngle: CGFloat.random(in: -3.0.0.3), duration: duration)]),
+                                         .rotate(byAngle: CGFloat.random(in: -3...3), duration: duration)]),
                                 .removeFromParent()]))
         }
     }

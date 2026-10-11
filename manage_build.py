@@ -117,7 +117,7 @@ def download():
             info_name = 'Payload/Astra.app/Info.plist'
         info = plistlib.loads(package.read(info_name))
         assert info['CFBundleIdentifier'] == 'io.github.kh1zsn0w.astraarcade'
-        assert 'Payload/Astra.app/WeatherGlass' in names
+        assert 'Payload/Astra.app/Astra' in names
         print('IPA_VERIFIED', info['CFBundleIdentifier'], info.get('CFBundleShortVersionString'))
     downloads = Path.home() / 'Downloads'
     downloads.mkdir(exist_ok=True)

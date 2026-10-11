@@ -6,3 +6,9 @@ DerivedData/
 *.xcresult
 Package/
 __pycache__/
+adapt_build.py
+patch_swift.py
+fix_ranges_only.py
+fast_delivery.py
+get_screenshot.py
+Astra-menu-simulator.png

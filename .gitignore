@@ -1,0 +1,8 @@
+DerivedData/
+*.xcodeproj
+.DS_Store
+*.ipa
+*.log
+*.xcresult
+Package/
+__pycache__/

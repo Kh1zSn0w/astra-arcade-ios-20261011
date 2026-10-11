@@ -1,0 +1,66 @@
+name: Build Astra iPhone Arcade
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate original assets and project
+        run: python3 verify_source.py
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate --spec project.yml
+      - name: Compile iPhone Release
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild -project Astra.xcodeproj -scheme Astra -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build.log | tail -n 80
+      - name: Package unsigned IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP=DerivedData/Build/Products/Release-iphoneos/Astra.app
+          test -s "$APP/Astra"
+          BUNDLE=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist")
+          test "$BUNDLE" = "io.github.kh1zsn0w.astraarcade"
+          test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$APP/Info.plist")" = "1.0"
+          mkdir -p Package/Payload
+          cp -R "$APP" Package/Payload/
+          (cd Package && zip -q -r ../Astra-Retro-Sky-v1.0-unsigned.ipa Payload)
+          unzip -t Astra-Retro-Sky-v1.0-unsigned.ipa | tail -n 2
+      - name: Optional simulator boot and menu screenshot
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEVICE=$(xcrun simctl list devices available | sed -nE 's/^.*iPhone 16 Pro[^()]*\(([0-9A-F-]{36})\).*$/\1/p' | head -n 1)
+          if [[ -z "$DEVICE" ]]; then
+            echo "Simulator model not installed. Skipping screenshot."
+            exit 0
+          fi
+          xcrun simctl boot "$DEVICE"
+          xcrun simctl bootstatus "$DEVICE" -b
+          xcrun simctl install "$DEVICE" DerivedData/Build/Products/Release-iphoneos/Astra.app
+          xcrun simctl launch "$DEVICE" io.github.kh1zsn0w.astraarcade
+          sleep 3
+          xcrun simctl io "$DEVICE" screenshot Astra-menu-simulator.png
+          xcrun simctl shutdown "$DEVICE"
+          test -s Astra-menu-simulator.png
+      - name: Upload verified unsigned IPA and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Astra-Retro-Sky-iOS-v1.0
+          path: |
+            Astra-Retro-Sky-v1.0-unsigned.ipa
+            build.log
+            Astra-menu-simulator.png
+          if-no-files-found: warn
+          retention-days: 7

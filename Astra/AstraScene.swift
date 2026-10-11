@@ -184,7 +184,7 @@ final class AstraScene: SKScene {
             stripe.position = CGPoint(x: w / 2, y: CGFloat(i) * h / 11)
             backdrop.addChild(stripe)
         }
-        line(from: CGPoint(x: 0, y: 5), to: CGPoint(x: w, y: 5), color: Ink.aqua, alpha: .28)
+        line(from: CGPoint(x: 0, y: 5), to: CGPoint(x: w, y: 5), color: Ink.aqua, alpha: 0.28)
     }
 
     private func updateBackdrop(_ dt: CGFloat) {
@@ -231,7 +231,7 @@ final class AstraScene: SKScene {
         text("SIGNAL / 024", size: 11, at: CGPoint(x: 26, y: h - 76), color: Ink.aqua, align: .left, parent: menuLayer)
         text("ARCADE DIVISION", size: 11, at: CGPoint(x: w - 25, y: h - 76), color: Ink.muted, align: .right, parent: menuLayer)
         line(from: CGPoint(x: 26, y: h - 99), to: CGPoint(x: w - 26, y: h - 99),
-             color: Ink.aqua, alpha: .35, parent: menuLayer)
+             color: Ink.aqua, alpha: 0.35, parent: menuLayer)
 
         text("A S T R A", size: min(74, w * 0.18), at: CGPoint(x: w / 2, y: top),
              color: Ink.white, parent: menuLayer, heavy: true)
@@ -363,8 +363,8 @@ final class AstraScene: SKScene {
         holder.addChild(back)
         text(message, size: 13, at: .zero, color: color, parent: holder)
         hud.addChild(holder)
-        holder.run(.sequence([.fadeIn(withDuration: .16), .wait(forDuration: 1.2),
-                              .fadeOut(withDuration: .44), .removeFromParent()]))
+        holder.run(.sequence([.fadeIn(withDuration: 0.16), .wait(forDuration: 1.2),
+                              .fadeOut(withDuration: 0.44), .removeFromParent()]))
     }
 
     private func displayPause() {
@@ -381,7 +381,7 @@ final class AstraScene: SKScene {
         text("SYSTEM / PAUSED", size: 12, at: CGPoint(x: size.width / 2, y: size.height * 0.68),
              color: Ink.aqua, parent: group)
         text("HOLD POSITION", size: 41, at: CGPoint(x: size.width / 2, y: size.height * 0.57),
-             heavy: true, parent: group)
+             parent: group, heavy: true)
         button("RESUME FLIGHT", name: "resume", at: CGPoint(x: size.width / 2, y: size.height * 0.43),
                width: min(size.width - 70, 330), highlighted: true, parent: group)
         button("ABORT MISSION", name: "quit", at: CGPoint(x: size.width / 2, y: size.height * 0.34),
@@ -405,21 +405,21 @@ final class AstraScene: SKScene {
         effects.removeAllChildren()
         hud.removeAllChildren()
         let w = size.width, h = size.height
-        text("MISSION / TERMINATED", size: 12, at: CGPoint(x: w / 2, y: h * .78),
+        text("MISSION / TERMINATED", size: 12, at: CGPoint(x: w / 2, y: h * 0.78),
              color: Ink.red)
-        text("SIGNAL LOST", size: 53, at: CGPoint(x: w / 2, y: h * .67),
+        text("SIGNAL LOST", size: 53, at: CGPoint(x: w / 2, y: h * 0.67),
              color: Ink.white, heavy: true)
-        line(from: CGPoint(x: 40, y: h * .61), to: CGPoint(x: w - 40, y: h * .61),
-             color: Ink.red, alpha: .55, parent: hud)
-        text("FINAL SCORE", size: 12, at: CGPoint(x: w / 2, y: h * .55),
+        line(from: CGPoint(x: 40, y: h * 0.61), to: CGPoint(x: w - 40, y: h * 0.61),
+             color: Ink.red, alpha: 0.55, parent: hud)
+        text("FINAL SCORE", size: 12, at: CGPoint(x: w / 2, y: h * 0.55),
              color: Ink.muted)
-        text(formatted(score), size: 46, at: CGPoint(x: w / 2, y: h * .49),
+        text(formatted(score), size: 46, at: CGPoint(x: w / 2, y: h * 0.49),
              color: Ink.orange, heavy: true)
-        text("BEST   " + formatted(highScore), size: 13, at: CGPoint(x: w / 2, y: h * .41),
+        text("BEST   " + formatted(highScore), size: 13, at: CGPoint(x: w / 2, y: h * 0.41),
              color: Ink.aqua)
-        button("REDEPLOY", name: "retry", at: CGPoint(x: w / 2, y: h * .29),
+        button("REDEPLOY", name: "retry", at: CGPoint(x: w / 2, y: h * 0.29),
                width: min(w - 75, 320), highlighted: true)
-        button("MAIN HANGAR", name: "home", at: CGPoint(x: w / 2, y: h * .19),
+        button("MAIN HANGAR", name: "home", at: CGPoint(x: w / 2, y: h * 0.19),
                width: min(w - 75, 320))
         text("PILOTS FALL. LEGENDS RETURN.", size: 10, at: CGPoint(x: w / 2, y: 65),
              color: Ink.muted)
@@ -444,7 +444,7 @@ final class AstraScene: SKScene {
         fireClock -= dt
         if fireClock <= 0 {
             firePlayer()
-            fireClock = weapon >= 3 ? .103 : .148
+            fireClock = weapon >= 3 ? 0.103 : 0.148
         }
         let newSector = min(99, 1 + Int(totalTime / 35))
         if newSector > sector {
@@ -459,7 +459,7 @@ final class AstraScene: SKScene {
             spawnClock -= dt
             if spawnClock <= 0 {
                 spawnFormation()
-                spawnClock = max(.48, 1.12 - CGFloat(sector - 1) * 0.045)
+                spawnClock = max(0.48, 1.12 - CGFloat(sector - 1) * 0.045)
             }
         }
         updateHostiles(dt)
@@ -521,7 +521,7 @@ final class AstraScene: SKScene {
         let hp = kind == 2 ? 54 : kind == 1 ? 31 : 18
         enemies.append(Hostile(sprite: enemy, hitPoints: hp + (sector - 1) * 3,
                                maximum: hp + (sector - 1) * 3, kind: kind, age: 0,
-                               nextShot: CGFloat.random(in: 1.1...2.3),
+                               nextShot: CGFloat.random(in: 1.1..0.2.3),
                                speed: (kind == 2 ? 75 : kind == 1 ? 148 : 115) + CGFloat(sector - 1) * 5))
     }
 
@@ -561,11 +561,11 @@ final class AstraScene: SKScene {
             enemies[i].nextShot -= dt
             let enemy = enemies[i]
             if enemy.kind == 3 {
-                let destination = size.height * .79
+                let destination = size.height * 0.79
                 if enemy.sprite.position.y > destination {
                     enemy.sprite.position.y = max(destination, enemy.sprite.position.y - dt * 130)
                 } else {
-                    enemy.sprite.position.x = size.width / 2 + sin(enemy.age * .82) * size.width * .19
+                    enemy.sprite.position.x = size.width / 2 + sin(enemy.age * 0.82) * size.width * 0.19
                 }
             } else {
                 enemy.sprite.position.y -= enemy.speed * dt
@@ -593,7 +593,7 @@ final class AstraScene: SKScene {
         let vx = dx / norm
         let vy = dy / norm
         if enemy.kind == 3 {
-            for offset in -3...3 {
+            for offset in -3..0.3 {
                 let direction = CGFloat(offset) * 0.17
                 let speed: CGFloat = 225
                 let delta = CGVector(dx: sin(direction) * speed, dy: -cos(direction) * speed)
@@ -639,7 +639,7 @@ final class AstraScene: SKScene {
                     let enemy = enemies[j]
                     let radius: CGFloat = enemy.kind == 3 ? 105 : enemy.kind == 2 ? 30 : 22
                     let x = (p.x - enemy.sprite.position.x) / (radius * (enemy.kind == 3 ? 1.15 : 1))
-                    let y = (p.y - enemy.sprite.position.y) / (radius * (enemy.kind == 3 ? .75 : 1))
+                    let y = (p.y - enemy.sprite.position.y) / (radius * (enemy.kind == 3 ? 0.75 : 1))
                     if x * x + y * y < 1 {
                         hurtEnemy(at: j, by: shot.damage)
                         remove = true
@@ -669,9 +669,9 @@ final class AstraScene: SKScene {
         if enemy.hitPoints <= 0 {
             destroyEnemy(at: index)
         } else if Int.random(in: 0..<5) == 0 {
-            spark(at: CGPoint(x: enemy.sprite.position.x + CGFloat.random(in: -12...12),
-                              y: enemy.sprite.position.y + CGFloat.random(in: -12...12)),
-                  color: Ink.orange, count: 2, scale: .45)
+            spark(at: CGPoint(x: enemy.sprite.position.x + CGFloat.random(in: -12..0.12),
+                              y: enemy.sprite.position.y + CGFloat.random(in: -12..0.12)),
+                  color: Ink.orange, count: 2, scale: 0.45)
         }
     }
 
@@ -681,7 +681,7 @@ final class AstraScene: SKScene {
         let boss = enemy.kind == 3
         enemy.sprite.removeFromParent()
         spark(at: location, color: boss ? Ink.orange : Ink.red,
-              count: boss ? 48 : 17, scale: boss ? 2 : .8)
+              count: boss ? 48 : 17, scale: boss ? 2 : 0.8)
         AstraAudio.shared.play("explode")
         if boss { AstraAudio.shared.impact(.heavy) }
         let chain = min(5, 1 + combo / 5)
@@ -706,7 +706,7 @@ final class AstraScene: SKScene {
             for shot in projectiles where !shot.playerOwned { shot.sprite.removeFromParent() }
             projectiles.removeAll(where: { !$0.playerOwned })
             announce("TARGET DESTROYED  /  +7000", color: Ink.aqua)
-            spawnSupply(kind: 0, at: CGPoint(x: size.width / 2, y: size.height * .57))
+            spawnSupply(kind: 0, at: CGPoint(x: size.width / 2, y: size.height * 0.57))
         } else if kills % 12 == 0 {
             spawnSupply(kind: [0, 0, 1, 2, 3].randomElement() ?? 0, at: location)
         }
@@ -770,7 +770,7 @@ final class AstraScene: SKScene {
                 case 2: bombs = min(3, bombs + 1); announce("ORDNANCE  /  RESTORED", color: Ink.orange)
                 default: shield = min(2, shield + 1); announce("AEGIS  /  SHIELD ONLINE", color: Ink.aqua)
                 }
-                spark(at: supply.sprite.position, color: Ink.aqua, count: 16, scale: .8)
+                spark(at: supply.sprite.position, color: Ink.aqua, count: 16, scale: 0.8)
                 AstraAudio.shared.play("pickup")
                 AstraAudio.shared.impact(.light)
                 supply.sprite.removeFromParent()
@@ -794,34 +794,34 @@ final class AstraScene: SKScene {
         ring.fillColor = Ink.aqua.withAlphaComponent(0.06)
         ring.zPosition = 200
         effects.addChild(ring)
-        ring.run(.sequence([.group([.scale(to: 13, duration: .65),
-                                    .fadeOut(withDuration: .65)]), .removeFromParent()]))
+        ring.run(.sequence([.group([.scale(to: 13, duration: 0.65),
+                                    .fadeOut(withDuration: 0.65)]), .removeFromParent()]))
         for shot in projectiles where !shot.playerOwned { shot.sprite.removeFromParent() }
         projectiles.removeAll(where: { !$0.playerOwned })
         for i in enemies.indices.reversed() {
             let damage = enemies[i].kind == 3 ? 105 : 999
             hurtEnemy(at: i, by: damage)
         }
-        invulnerable = max(invulnerable, .75)
+        invulnerable = max(invulnerable, 0.75)
         syncHUD()
     }
 
     private func spark(at point: CGPoint, color: SKColor, count: Int, scale: CGFloat) {
         for _ in 0..<count {
-            let chip = SKShapeNode(rectOf: CGSize(width: CGFloat.random(in: 2...5) * scale,
-                                                   height: CGFloat.random(in: 3...9) * scale))
+            let chip = SKShapeNode(rectOf: CGSize(width: CGFloat.random(in: 2..0.5) * scale,
+                                                   height: CGFloat.random(in: 3..0.9) * scale))
             chip.fillColor = Int.random(in: 0..<4) == 0 ? Ink.white : color
             chip.strokeColor = .clear
             chip.isAntialiased = false
             chip.position = point
             chip.zPosition = 150
             effects.addChild(chip)
-            let dx = CGFloat.random(in: -98...98) * scale
-            let dy = CGFloat.random(in: -130...130) * scale
-            let duration = Double.random(in: .25...0.70)
+            let dx = CGFloat.random(in: -98..0.98) * scale
+            let dy = CGFloat.random(in: -130..0.130) * scale
+            let duration = Double.random(in: 0.25..0.0.70)
             chip.run(.sequence([.group([.moveBy(x: dx, y: dy, duration: duration),
                                          .fadeOut(withDuration: duration),
-                                         .rotate(byAngle: CGFloat.random(in: -3...3), duration: duration)]),
+                                         .rotate(byAngle: CGFloat.random(in: -3..0.3), duration: duration)]),
                                 .removeFromParent()]))
         }
     }
@@ -842,7 +842,7 @@ final class AstraScene: SKScene {
     private func aim(for point: CGPoint) -> CGPoint {
         let margin: CGFloat = 34
         return CGPoint(x: min(size.width - margin, max(margin, point.x)),
-                       y: min(size.height * .68, max(size.height * .16, point.y + 68)))
+                       y: min(size.height * 0.68, max(size.height * 0.16, point.y + 68)))
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
